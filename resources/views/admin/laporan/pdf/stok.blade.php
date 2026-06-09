@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laporan Stok Barang</title>
+    <style>
+        body { font-family: sans-serif; font-size: 12px; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #0F766E; padding-bottom: 10px; position: relative; }
+        .logo { position: absolute; left: 0; top: 0; width: 60px; height: 60px; }
+        .title { font-size: 18px; font-weight: bold; margin: 0; color: #0F766E; }
+        .subtitle { font-size: 14px; margin: 5px 0; }
+        .address { font-size: 10px; color: #555; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; color: #333; font-weight: bold; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+    </style>
+</head>
+<body>
+    @php
+        $setting = \App\Models\Setting::first();
+    @endphp
+
+    <div class="header">
+        @if($setting && $setting->logo)
+            @php
+                $path = storage_path('app/public/' . $setting->logo);
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                if (file_exists($path)) {
+                    $data = file_get_contents($path);
+                    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                    echo '<img src="'.$base64.'" class="logo">';
+                }
+            @endphp
+        @endif
+        
+        <h1 class="title">{{ $setting->nama_yayasan ?? 'Yayasan Masjid' }}</h1>
+        <p class="subtitle">{{ $setting->nama_sistem ?? 'Sistem Inventaris' }}</p>
+        <p class="address">{{ $setting->alamat ?? '' }} | Telp: {{ $setting->telepon ?? '-' }}</p>
+    </div>
+
+    <h2 class="text-center" style="margin-top:20px; font-size: 16px;">LAPORAN STOK BARANG</h2>
+    <p class="text-right" style="font-size: 10px; margin-bottom: 5px;">Dicetak pada: {{ now()->format('d/m/Y H:i') }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th width="5%">No</th>
+                <th width="15%">Kode Barang</th>
+                <th width="30%">Nama Barang</th>
+                <th width="20%">Kategori</th>
+                <th width="15%">Stok</th>
+                <th width="15%">Satuan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($barangs as $index => $item)
+            <tr>
+                <td class="text-center">{{ $index + 1 }}</td>
+                <td>{{ $item->kode_barang }}</td>
+                <td>{{ $item->nama_barang }}</td>
+                <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
+                <td class="text-center">{{ $item->stok }}</td>
+                <td>{{ $item->satuan->nama_satuan ?? '-' }}</td>
+            </tr>
+            @endforeach
+            @if($barangs->isEmpty())
+            <tr>
+                <td colspan="6" class="text-center">Tidak ada data barang.</td>
+            </tr>
+            @endif
+        </tbody>
+    </table>
+
+    <div style="margin-top: 50px; width: 100%;">
+        <div style="float: right; width: 200px; text-align: center;">
+            <p>Mengetahui,</p>
+            <br><br><br><br>
+            <p><strong>Admin / Pengurus</strong></p>
+        </div>
+    </div>
+</body>
+</html>
