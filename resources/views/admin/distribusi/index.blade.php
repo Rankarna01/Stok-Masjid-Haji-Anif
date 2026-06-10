@@ -41,13 +41,20 @@
                             <div class="flex flex-col items-end gap-2">
                                 <span class="px-3 py-1 text-xs font-semibold rounded-full border bg-success/10 text-success border-success/20 inline-flex items-center gap-1">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    Telah Disalurkan
+                                    <span x-text="item.distribusi.bukti_terima ? 'Diterima Koor' : 'Telah Disalurkan'"></span>
                                 </span>
                                 <div class="text-[10px] text-gray-500 font-medium" x-text="'Tgl: ' + formatDate(item.distribusi.tanggal_distribusi)"></div>
                                 <template x-if="item.distribusi.dokumentasi">
                                     <a :href="'/storage/' + item.distribusi.dokumentasi" target="_blank" class="text-[10px] font-semibold text-primary hover:underline flex items-center gap-1 mt-1">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                        Lihat Dokumentasi
+                                        Lihat Dokumentasi Penyaluran
+                                    </a>
+                                </template>
+                                
+                                <template x-if="item.distribusi.bukti_terima">
+                                    <a :href="'/storage/' + item.distribusi.bukti_terima" target="_blank" class="text-[10px] font-semibold text-success hover:underline flex items-center gap-1 mt-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                        Lihat Bukti Penerimaan Koor
                                     </a>
                                 </template>
                             </div>

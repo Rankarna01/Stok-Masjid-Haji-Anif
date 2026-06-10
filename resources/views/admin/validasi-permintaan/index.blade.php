@@ -58,9 +58,19 @@
                         <template x-for="detail in item.detail" :key="detail.id">
                             <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-primary">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                                    </div>
+                                    <template x-if="!detail.bukti_permintaan">
+                                        <div class="w-10 h-10 shrink-0 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-primary">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                                        </div>
+                                    </template>
+                                    <template x-if="detail.bukti_permintaan">
+                                        <a :href="'/storage/' + detail.bukti_permintaan" target="_blank" class="shrink-0 group relative block">
+                                            <img :src="'/storage/' + detail.bukti_permintaan" alt="Bukti" class="w-10 h-10 object-cover rounded-lg border border-gray-200 shadow-sm group-hover:opacity-75 transition-smooth">
+                                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-smooth">
+                                                <svg class="w-4 h-4 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            </div>
+                                        </a>
+                                    </template>
                                     <div>
                                         <div class="text-sm font-semibold text-textDark" x-text="detail.barang?.nama_barang"></div>
                                         <div class="text-[10px] text-gray-400">

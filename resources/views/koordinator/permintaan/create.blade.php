@@ -9,8 +9,8 @@
 
     <form @submit.prevent="submitPermintaan">
         <!-- Input Area -->
-        <div class="bg-gray-50/50 p-5 rounded-2xl border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 items-end">
-            <div class="flex-1 w-full">
+        <div class="bg-gray-50/50 p-5 rounded-2xl border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 items-end flex-wrap">
+            <div class="flex-1 min-w-[200px]">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Pilih Barang</label>
                 <select x-model="currentItem.barang_id" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
                     <option value="">-- Pilih Barang --</option>
@@ -21,13 +21,17 @@
                     @endforeach
                 </select>
             </div>
-            <div class="w-full md:w-32">
+            <div class="w-32">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Jumlah</label>
                 <input type="number" x-model="currentItem.jumlah" min="1" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
             </div>
-            <div class="flex-1 w-full">
+            <div class="flex-1 min-w-[200px]">
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Alasan (Opsional)</label>
                 <input type="text" x-model="currentItem.alasan" placeholder="Misal: Untuk jumat bersih" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
+            </div>
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Bukti (Opsional)</label>
+                <input type="file" x-ref="buktiFile" @change="handleFile($event)" accept="image/*" class="w-full px-4 py-1.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
             </div>
             <div class="w-full md:w-auto">
                 <button type="button" @click="addItem()" class="w-full px-4 py-2 bg-primary/10 text-primary font-semibold rounded-xl border border-primary/20 hover:bg-primary/20 transition-smooth flex justify-center items-center gap-2">
@@ -46,6 +50,7 @@
                         <th class="px-6 py-3 font-semibold">Barang</th>
                         <th class="px-6 py-3 font-semibold text-center">Jumlah</th>
                         <th class="px-6 py-3 font-semibold">Alasan</th>
+                        <th class="px-6 py-3 font-semibold text-center">Bukti</th>
                         <th class="px-6 py-3 font-semibold text-center w-20">Aksi</th>
                     </tr>
                 </thead>
@@ -57,6 +62,10 @@
                                 <span x-text="item.jumlah"></span> <span class="text-xs font-medium text-gray-500" x-text="item.satuan"></span>
                             </td>
                             <td class="px-6 py-3 text-text" x-text="item.alasan || '-'"></td>
+                            <td class="px-6 py-3 text-center">
+                                <span x-show="item.bukti" class="px-2 py-1 text-[10px] font-semibold bg-primary/10 text-primary rounded-lg">Terlampir</span>
+                                <span x-show="!item.bukti" class="text-xs text-gray-400">-</span>
+                            </td>
                             <td class="px-6 py-3 text-center">
                                 <button type="button" @click="removeItem(index)" class="p-1.5 text-danger hover:bg-danger/10 rounded-lg transition-smooth border border-transparent hover:border-danger/20">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -89,8 +98,13 @@
         Alpine.data('buatPermintaan', () => ({
             items: [],
             isLoading: false,
-            currentItem: { barang_id: '', jumlah: 1, alasan: '', nama_barang: '', satuan: '', stok: 0 },
+            currentItem: { barang_id: '', jumlah: 1, alasan: '', nama_barang: '', satuan: '', stok: 0, bukti: null },
             
+            handleFile(event) {
+                const file = event.target.files[0];
+                this.currentItem.bukti = file || null;
+            },
+
             addItem() {
                 if (!this.currentItem.barang_id) {
                     Swal.fire({ icon: 'warning', title: 'Pilih Barang', text: 'Silakan pilih barang terlebih dahulu.' });
@@ -128,13 +142,17 @@
                     if(this.currentItem.alasan) {
                          this.items[existingIndex].alasan = this.currentItem.alasan;
                     }
+                    if(this.currentItem.bukti) {
+                         this.items[existingIndex].bukti = this.currentItem.bukti;
+                    }
                 } else {
                     // Tambah baru
                     this.items.push({ ...this.currentItem });
                 }
 
                 // Reset form input
-                this.currentItem = { barang_id: '', jumlah: 1, alasan: '', nama_barang: '', satuan: '', stok: 0 };
+                this.currentItem = { barang_id: '', jumlah: 1, alasan: '', nama_barang: '', satuan: '', stok: 0, bukti: null };
+                if (this.$refs.buktiFile) this.$refs.buktiFile.value = '';
             },
 
             removeItem(index) {
@@ -146,14 +164,21 @@
                 
                 this.isLoading = true;
                 
+                const formData = new FormData();
+                this.items.forEach((item, index) => {
+                    formData.append(`items[${index}][barang_id]`, item.barang_id);
+                    formData.append(`items[${index}][jumlah]`, item.jumlah);
+                    if (item.alasan) formData.append(`items[${index}][alasan]`, item.alasan);
+                    if (item.bukti) formData.append(`items[${index}][bukti]`, item.bukti);
+                });
+
                 fetch('{{ route("koordinator.permintaan.store") }}', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'X-Requested-With': 'XMLHttpRequest'
                     },
-                    body: JSON.stringify({ items: this.items })
+                    body: formData
                 })
                 .then(res => res.json().then(data => ({ status: res.status, body: data })))
                 .then(res => {

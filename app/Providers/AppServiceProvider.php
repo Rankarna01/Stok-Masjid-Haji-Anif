@@ -19,10 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // ...
-        if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
-            $appSetting = \App\Models\Setting::first();
-            \Illuminate\Support\Facades\View::share('appSetting', $appSetting);
+        try {
+            if (!app()->runningInConsole() && \Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                $appSetting = \App\Models\Setting::first();
+                \Illuminate\Support\Facades\View::share('appSetting', $appSetting);
+            }
+        } catch (\Exception $e) {
+            // Ignore database connection errors during composer install/deployment
         }
     }
 }

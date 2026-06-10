@@ -39,6 +39,7 @@ class PermintaanController extends Controller
             'items.*.barang_id' => 'required|exists:barang,id',
             'items.*.jumlah' => 'required|integer|min:1',
             'items.*.alasan' => 'nullable|string',
+            'items.*.bukti' => 'nullable|image|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -64,11 +65,17 @@ class PermintaanController extends Controller
                     ], 400);
                 }
 
+                $buktiPath = null;
+                if (isset($item['bukti']) && $item['bukti']->isValid()) {
+                    $buktiPath = $item['bukti']->store('bukti_permintaan', 'public');
+                }
+
                 PermintaanDetail::create([
                     'permintaan_id' => $permintaan->id,
                     'barang_id' => $item['barang_id'],
                     'jumlah' => $item['jumlah'],
                     'alasan' => $item['alasan'] ?? null,
+                    'bukti_permintaan' => $buktiPath,
                 ]);
             }
 
