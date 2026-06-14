@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class KoordinatorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -23,9 +20,6 @@ class KoordinatorController extends Controller
         return view('admin.koordinator.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -57,9 +51,6 @@ class KoordinatorController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $koordinator = User::where('role', 'koordinator')->findOrFail($id);
@@ -96,9 +87,7 @@ class KoordinatorController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+  
     public function destroy(string $id)
     {
         $koordinator = User::where('role', 'koordinator')->findOrFail($id);

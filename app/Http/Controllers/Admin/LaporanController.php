@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
+use App\Models\Distribusi;
 use App\Models\Permintaan;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanStokExport;
 use App\Exports\LaporanPermintaanExport;
+use App\Exports\LaporanDistribusiExport;
 
 class LaporanController extends Controller
 {
@@ -40,6 +42,22 @@ class LaporanController extends Controller
         }
 
         return view('admin.laporan.permintaan');
+    }
+
+    // Distribusi
+    public function distribusi(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Distribusi::with(['permintaan.user', 'permintaan.detail.barang.satuan']);
+            
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $query->whereBetween('tanggal_distribusi', [$request->start_date, $request->end_date]);
+            }
+
+            return response()->json($query->latest()->get());
+        }
+
+        return view('admin.laporan.distribusi');
     }
 
     // Export PDF Stok
@@ -79,5 +97,27 @@ class LaporanController extends Controller
     public function exportPermintaanExcel(Request $request)
     {
         return Excel::download(new LaporanPermintaanExport($request->start_date, $request->end_date, $request->status), 'Laporan_Permintaan_Barang.xlsx');
+    }
+
+    // Export PDF Distribusi
+    public function exportDistribusiPdf(Request $request)
+    {
+        $query = Distribusi::with(['permintaan.user', 'permintaan.detail.barang.satuan']);
+            
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('tanggal_distribusi', [$request->start_date, $request->end_date]);
+        }
+
+        $distribusis = $query->latest()->get();
+        $filter = $request->only(['start_date', 'end_date']);
+        
+        $pdf = Pdf::loadView('admin.laporan.pdf.distribusi', compact('distribusis', 'filter'))->setPaper('a4', 'landscape');
+        return $pdf->stream('Laporan_Distribusi_Barang.pdf');
+    }
+
+    // Export Excel Distribusi
+    public function exportDistribusiExcel(Request $request)
+    {
+        return Excel::download(new LaporanDistribusiExport($request->start_date, $request->end_date), 'Laporan_Distribusi_Barang.xlsx');
     }
 }

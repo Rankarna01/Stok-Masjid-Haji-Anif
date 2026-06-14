@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -27,9 +25,6 @@ class BarangController extends Controller
         return view('admin.barang.index', compact('kategoris', 'satuans'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -87,9 +82,6 @@ class BarangController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $barang = Barang::findOrFail($id);

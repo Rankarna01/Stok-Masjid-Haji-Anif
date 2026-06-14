@@ -63,7 +63,6 @@ class KategoriController extends Controller
     {
         $kategori = Kategori::findOrFail($id);
         
-        // Prevent deletion if items exist
         if ($kategori->barang()->exists()) {
             return response()->json(['message' => 'Gagal! Kategori ini masih memiliki barang yang terdaftar.'], 400);
         }

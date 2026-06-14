@@ -14,13 +14,10 @@ class DashboardController extends Controller
     {
         $userId = Auth::id();
 
-        // Statistik
         $totalPermintaan = Permintaan::where('user_id', $userId)->count();
         $permintaanDisetujui = Permintaan::where('user_id', $userId)->where('status', 'Disetujui')->count();
         $permintaanMenunggu = Permintaan::where('user_id', $userId)->where('status', 'Menunggu')->count();
         $permintaanDitolak = Permintaan::where('user_id', $userId)->where('status', 'Ditolak')->count();
-
-        // Data Chart - Permintaan 6 Bulan Terakhir
         $chartData = [];
         $categories = [];
         $dataPermintaan = [];
@@ -36,8 +33,7 @@ class DashboardController extends Controller
                                         
             $dataPermintaan[] = $count;
         }
-
-        // 5 Permintaan Terbaru
+        
         $permintaanTerbaru = Permintaan::where('user_id', $userId)
                                         ->with('detail.barang')
                                         ->latest()

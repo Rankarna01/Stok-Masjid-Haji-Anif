@@ -56,7 +56,6 @@ class PermintaanController extends Controller
             ]);
 
             foreach ($request->items as $item) {
-                // Opsional: Validasi apakah stok mencukupi
                 $barang = Barang::findOrFail($item['barang_id']);
                 if ($item['jumlah'] > $barang->stok) {
                     DB::rollback();

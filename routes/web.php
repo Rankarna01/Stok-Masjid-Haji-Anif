@@ -40,6 +40,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('permintaan', [\App\Http\Controllers\Admin\LaporanController::class, 'permintaan'])->name('permintaan');
         Route::get('permintaan/pdf', [\App\Http\Controllers\Admin\LaporanController::class, 'exportPermintaanPdf'])->name('permintaan.pdf');
         Route::get('permintaan/excel', [\App\Http\Controllers\Admin\LaporanController::class, 'exportPermintaanExcel'])->name('permintaan.excel');
+        
+        Route::get('distribusi', [\App\Http\Controllers\Admin\LaporanController::class, 'distribusi'])->name('distribusi');
+        Route::get('distribusi/pdf', [\App\Http\Controllers\Admin\LaporanController::class, 'exportDistribusiPdf'])->name('distribusi.pdf');
+        Route::get('distribusi/excel', [\App\Http\Controllers\Admin\LaporanController::class, 'exportDistribusiExcel'])->name('distribusi.excel');
     });
 });
 

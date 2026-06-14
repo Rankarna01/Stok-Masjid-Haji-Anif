@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laporan Distribusi Barang</title>
+    <style>
+        body { font-family: sans-serif; font-size: 11px; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #0F766E; padding-bottom: 10px; position: relative; }
+        .logo { position: absolute; left: 0; top: 0; width: 60px; height: 60px; }
+        .title { font-size: 18px; font-weight: bold; margin: 0; color: #0F766E; }
+        .subtitle { font-size: 14px; margin: 5px 0; }
+        .address { font-size: 10px; color: #555; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; color: #333; font-weight: bold; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .filter-info { font-size: 10px; margin-bottom: 10px; color: #555; }
+    </style>
+</head>
+<body>
+    @php
+        $setting = \App\Models\Setting::first();
+    @endphp
+
+    <div class="header">
+        @if($setting && $setting->logo)
+            @php
+                $path = storage_path('app/public/' . $setting->logo);
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                if (file_exists($path)) {
+                    $data = file_get_contents($path);
+                    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                    echo '<img src="'.$base64.'" class="logo">';
+                }
+            @endphp
+        @endif
+        
+        <h1 class="title">{{ $setting->nama_yayasan ?? 'Yayasan Masjid' }}</h1>
+        <p class="subtitle">{{ $setting->nama_sistem ?? 'Sistem Inventaris' }}</p>
+        <p class="address">{{ $setting->alamat ?? '' }} | Telp: {{ $setting->telepon ?? '-' }}</p>
+    </div>
+
+    <h2 class="text-center" style="margin-top:15px; font-size: 16px; margin-bottom: 5px;">LAPORAN DISTRIBUSI BARANG</h2>
+    
+    <div class="filter-info">
+        @if(isset($filter['start_date']) && isset($filter['end_date']))
+            Periode: {{ date('d/m/Y', strtotime($filter['start_date'])) }} s/d {{ date('d/m/Y', strtotime($filter['end_date'])) }}
+        @else
+            Periode: Semua Waktu
+        @endif
+        <br>
+        <br>
+        <span style="float: right;">Dicetak pada: {{ now()->format('d/m/Y H:i') }}</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th width="5%" class="text-center">No</th>
+                <th width="12%">Tgl Penyaluran</th>
+                <th width="15%">No. Permintaan</th>
+                <th width="20%">Koordinator & Wilayah</th>
+                <th width="30%">Barang Disalurkan</th>
+                <th width="18%">Status Penerimaan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($distribusis as $index => $item)
+            <tr>
+                <td class="text-center">{{ $index + 1 }}</td>
+                <td>{{ date('d M Y', strtotime($item->tanggal_distribusi)) }}</td>
+                <td>PRM-{{ str_pad($item->permintaan_id, 4, '0', STR_PAD_LEFT) }}</td>
+                <td>
+                    <strong>{{ $item->permintaan->user->name ?? '-' }}</strong><br>
+                    <span style="font-size: 9px; color: #555;">{{ $item->permintaan->user->nama_mesjid ?? '-' }}</span>
+                </td>
+                <td>
+                    <ul style="margin: 0; padding-left: 15px;">
+                        @foreach($item->permintaan->detail as $d)
+                            <li>{{ $d->barang->nama_barang ?? '-' }} ({{ $d->jumlah }} {{ $d->barang->satuan->nama_satuan ?? '' }})</li>
+                        @endforeach
+                    </ul>
+                </td>
+                <td>
+                    @if($item->bukti_terima)
+                        Diterima Koor<br>
+                        <span style="font-size: 9px; color: #555;">Tgl: {{ date('d M Y', strtotime($item->tanggal_terima)) }}</span>
+                    @else
+                        Telah Disalurkan<br>
+                        <span style="font-size: 9px; color: #555;">(Menunggu Koor)</span>
+                    @endif
+                </td>
+            </tr>
+            @endforeach
+            @if($distribusis->isEmpty())
+            <tr>
+                <td colspan="6" class="text-center">Tidak ada riwayat distribusi pada periode ini.</td>
+            </tr>
+            @endif
+        </tbody>
+    </table>
+
+    <div style="margin-top: 50px; width: 100%;">
+        <div style="float: right; width: 200px; text-align: center;">
+            <p>Mengetahui,</p>
+            <br><br><br><br>
+            <p><strong>Admin / Pengurus</strong></p>
+        </div>
+    </div>
+</body>
+</html>

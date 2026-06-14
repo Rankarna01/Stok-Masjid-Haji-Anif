@@ -14,7 +14,7 @@ class DistribusiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Get all approved requests
+            
             $permintaans = Permintaan::where('status', 'Disetujui')
                 ->with(['user', 'detail.barang.satuan', 'distribusi'])
                 ->orderBy('tanggal', 'desc')
@@ -37,7 +37,7 @@ class DistribusiController extends Controller
             return response()->json(['message' => 'Data tidak valid atau foto terlalu besar (Max 2MB).', 'errors' => $validator->errors()], 422);
         }
 
-        // Cek apakah sudah didistribusikan
+        
         $existing = Distribusi::where('permintaan_id', $request->permintaan_id)->first();
         if ($existing) {
             return response()->json(['message' => 'Permintaan ini sudah didistribusikan.'], 400);

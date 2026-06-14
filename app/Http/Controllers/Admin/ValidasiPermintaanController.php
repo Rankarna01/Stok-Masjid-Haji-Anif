@@ -39,7 +39,6 @@ class ValidasiPermintaanController extends Controller
 
             $permintaan = Permintaan::with('detail.barang')->findOrFail($id);
 
-            // Jika sudah diproses, tidak bisa diproses lagi
             if ($permintaan->status !== 'Menunggu') {
                 return response()->json(['message' => 'Permintaan ini sudah diproses sebelumnya.'], 400);
             }
@@ -47,12 +46,10 @@ class ValidasiPermintaanController extends Controller
             $permintaan->status = $request->status;
             $permintaan->save();
 
-            // Jika disetujui, potong stok dan catat di stok keluar
             if ($request->status === 'Disetujui') {
                 foreach ($permintaan->detail as $detail) {
                     $barang = $detail->barang;
                     
-                    // Cek stok
                     if ($barang->stok < $detail->jumlah) {
                         DB::rollback();
                         return response()->json([

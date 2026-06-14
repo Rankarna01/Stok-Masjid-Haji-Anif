@@ -193,6 +193,10 @@
                             <svg class="w-5 h-5 {{ request()->routeIs('admin.laporan.permintaan') ? '' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             <span class="font-medium text-sm">Laporan Permintaan</span>
                         </a></li>
+                        <li><a href="{{ route('admin.laporan.distribusi') }}" class="flex items-center gap-3 px-4 py-2.5 {{ request()->routeIs('admin.laporan.distribusi') ? 'bg-primary text-white shadow-sm' : 'text-text hover:bg-gray-50' }} rounded-xl transition-smooth">
+                            <svg class="w-5 h-5 {{ request()->routeIs('admin.laporan.distribusi') ? '' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span class="font-medium text-sm">Laporan Distribusi</span>
+                        </a></li>
 
                         <li class="px-2 mt-6 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Pengaturan</li>
                         <li><a href="{{ route('admin.settings.index') }}" class="flex items-center gap-3 px-4 py-2.5 {{ request()->routeIs('admin.settings.*') ? 'bg-primary text-white shadow-sm' : 'text-text hover:bg-gray-50' }} rounded-xl transition-smooth">
