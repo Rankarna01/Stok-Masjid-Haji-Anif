@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Sistem Stok Kebersihan Mesjid' }}</title>
     
-    <!-- Google Fonts Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -20,13 +18,13 @@
                         sans: ['Poppins', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#0F766E', // Teal color from mockup
+                        primary: '#0F766E', 
                         secondary: '#14B8A6',
-                        success: '#10B981', // Green from mockup
-                        warning: '#F59E0B', // Yellow
-                        danger: '#EF4444',  // Red
-                        info: '#3B82F6',    // Blue
-                        purple: '#8B5CF6',  // Purple
+                        success: '#10B981', 
+                        warning: '#F59E0B', 
+                        danger: '#EF4444', 
+                        info: '#3B82F6',    
+                        purple: '#8B5CF6',  
                         background: '#F8FAFC',
                         card: '#FFFFFF',
                         border: '#E2E8F0',
@@ -287,13 +285,7 @@
                     <h1 class="text-2xl font-semibold text-textDark">{{ $title ?? 'Dashboard' }}</h1>
                 </div>
 
-                <div class="flex items-center gap-5">
-                    <!-- Notifications -->
-                    <button class="relative text-gray-400 hover:text-primary transition-smooth focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                        <span class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-danger ring-2 ring-background"></span>
-                    </button>
-                    
+                <div class="flex items-center gap-5">    
                     <!-- Profile Dropdown -->
                     <div class="relative">
                         <button @click="profileDropdownOpen = !profileDropdownOpen" @click.away="profileDropdownOpen = false" class="flex items-center gap-3 focus:outline-none bg-white py-1.5 px-3 rounded-full border border-gray-200 shadow-sm hover:shadow transition-smooth">
