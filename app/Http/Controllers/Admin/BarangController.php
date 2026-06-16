@@ -8,6 +8,7 @@ use App\Models\Kategori;
 use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class BarangController extends Controller
 {
@@ -33,6 +34,7 @@ class BarangController extends Controller
             'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',
+            'foto_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -44,8 +46,12 @@ class BarangController extends Controller
         $nextId = $latestBarang ? $latestBarang->id + 1 : 1;
         $kodeBarang = 'BRG-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
-        $data = $request->all();
+        $data = $request->except('foto_barang');
         $data['kode_barang'] = $kodeBarang;
+
+        if ($request->hasFile('foto_barang')) {
+            $data['foto_barang'] = $request->file('foto_barang')->store('barang', 'public');
+        }
 
         $barang = Barang::create($data);
 
@@ -68,13 +74,23 @@ class BarangController extends Controller
             'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',
+            'foto_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $barang->update($request->all());
+        $data = $request->except('foto_barang');
+
+        if ($request->hasFile('foto_barang')) {
+            if ($barang->foto_barang) {
+                Storage::disk('public')->delete($barang->foto_barang);
+            }
+            $data['foto_barang'] = $request->file('foto_barang')->store('barang', 'public');
+        }
+
+        $barang->update($data);
 
         return response()->json([
             'message' => 'Data Barang berhasil diperbarui',
@@ -85,6 +101,9 @@ class BarangController extends Controller
     public function destroy(string $id)
     {
         $barang = Barang::findOrFail($id);
+        if ($barang->foto_barang) {
+            Storage::disk('public')->delete($barang->foto_barang);
+        }
         $barang->delete();
 
         return response()->json(['message' => 'Barang berhasil dihapus']);

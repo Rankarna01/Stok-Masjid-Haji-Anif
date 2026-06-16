@@ -20,9 +20,14 @@
         <template x-for="item in filteredItems" :key="item.id">
             <div class="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition-smooth hover:border-primary/30 flex flex-col h-full">
                 <div class="flex justify-between items-start mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                    </div>
+                    <template x-if="item.foto_barang">
+                        <img :src="'/storage/' + item.foto_barang" class="w-12 h-12 rounded-xl object-cover shadow-sm border border-gray-100 shrink-0">
+                    </template>
+                    <template x-if="!item.foto_barang">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                        </div>
+                    </template>
                     <span class="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-lg text-[10px] font-bold uppercase tracking-wider" x-text="item.kategori?.nama_kategori || '-'"></span>
                 </div>
                 

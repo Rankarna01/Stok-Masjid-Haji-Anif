@@ -15,6 +15,7 @@
         <table class="w-full text-sm text-left">
             <thead class="text-xs text-gray-500 uppercase bg-gray-50/50 border-b border-border">
                 <tr>
+                    <th class="px-6 py-4 font-semibold">Gambar</th>
                     <th class="px-6 py-4 font-semibold">Kode</th>
                     <th class="px-6 py-4 font-semibold">Nama Barang</th>
                     <th class="px-6 py-4 font-semibold">Kategori</th>
@@ -26,6 +27,14 @@
             <tbody class="divide-y divide-border">
                 <template x-for="item in items" :key="item.id">
                     <tr class="hover:bg-gray-50/50 transition-smooth">
+                        <td class="px-6 py-4">
+                            <template x-if="item.foto_barang">
+                                <img :src="'/storage/' + item.foto_barang" class="w-12 h-12 rounded-lg object-cover border border-gray-200">
+                            </template>
+                            <template x-if="!item.foto_barang">
+                                <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-400 text-xs font-medium">No Img</div>
+                            </template>
+                        </td>
                         <td class="px-6 py-4 font-medium text-primary" x-text="item.kode_barang"></td>
                         <td class="px-6 py-4 font-semibold text-textDark" x-text="item.nama_barang"></td>
                         <td class="px-6 py-4 text-text" x-text="item.kategori.nama_kategori"></td>
@@ -118,6 +127,13 @@
                         <label class="block text-xs font-semibold text-gray-500 mb-1">Keterangan (Opsional)</label>
                         <textarea x-model="form.keterangan" rows="2" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm resize-none"></textarea>
                     </div>
+
+                    <!-- Foto Barang -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">Foto Barang (Opsional)</label>
+                        <input type="file" x-ref="foto_barang" accept="image/*" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                        <span class="text-xs text-danger" x-text="errors.foto_barang"></span>
+                    </div>
                 </div>
 
                 <!-- Modal Footer -->
@@ -165,6 +181,7 @@
                     this.editId = null;
                     this.form = { kode_barang: '', nama_barang: '', kategori_id: '', satuan_id: '', stok: 0, keterangan: '' };
                 }
+                if (this.$refs.foto_barang) this.$refs.foto_barang.value = '';
                 this.isModalOpen = true;
             },
             
@@ -177,21 +194,31 @@
                 this.errors = {};
                 
                 let url = '{{ route("admin.barang.store") }}';
-                let method = 'POST';
+                
+                let formData = new FormData();
+                formData.append('nama_barang', this.form.nama_barang);
+                formData.append('kategori_id', this.form.kategori_id);
+                formData.append('satuan_id', this.form.satuan_id);
+                formData.append('stok', this.form.stok);
+                if (this.form.keterangan) formData.append('keterangan', this.form.keterangan);
+                
+                let fileInput = this.$refs.foto_barang;
+                if (fileInput && fileInput.files[0]) {
+                    formData.append('foto_barang', fileInput.files[0]);
+                }
                 
                 if (this.isEdit) {
                     url = `/admin/barang/${this.editId}`;
-                    method = 'PUT';
+                    formData.append('_method', 'PUT');
                 }
                 
                 fetch(url, {
-                    method: method,
+                    method: 'POST', // Always POST when using FormData (Laravel will treat as PUT via _method)
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'X-Requested-With': 'XMLHttpRequest'
                     },
-                    body: JSON.stringify(this.form)
+                    body: formData
                 })
                 .then(res => res.json().then(data => ({ status: res.status, body: data })))
                 .then(res => {
