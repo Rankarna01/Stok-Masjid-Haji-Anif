@@ -35,15 +35,22 @@ class KoordinatorController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $koordinator = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'koordinator',
-            'nama_mesjid' => $request->nama_mesjid,
-            'no_hp' => $request->no_hp,
-            'alamat' => $request->alamat,
-        ]);
+        try {
+            $koordinator = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'koordinator',
+                'nama_mesjid' => $request->nama_mesjid,
+                'no_hp' => $request->no_hp,
+                'alamat' => $request->alamat,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Exception Caught: ' . $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
 
         return response()->json([
             'message' => 'Koordinator berhasil ditambahkan',
