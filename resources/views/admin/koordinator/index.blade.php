@@ -188,9 +188,30 @@
                     },
                     body: JSON.stringify(this.form)
                 })
-                .then(res => res.json().then(data => ({ status: res.status, body: data })))
+                .then(async res => {
+                    const contentType = res.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = await res.json();
+                        return { status: res.status, body: data, isJson: true };
+                    } else {
+                        const text = await res.text();
+                        return { status: res.status, body: text, isJson: false };
+                    }
+                })
                 .then(res => {
                     this.isLoading = false;
+                    
+                    if (!res.isJson) {
+                        // Server returned HTML (e.g. 500 error page or 419 token expired)
+                        let errorMsg = "Terjadi kesalahan pada server.";
+                        if (res.status === 419) errorMsg = "Sesi Anda telah kedaluwarsa. Silakan refresh halaman.";
+                        if (res.status >= 500) errorMsg = "Terjadi kesalahan internal server (500).";
+                        
+                        console.error("Server HTML Response:", res.body);
+                        Swal.fire({ icon: 'error', title: 'Oops...', text: errorMsg });
+                        return;
+                    }
+
                     if (res.status === 422) {
                         // Validation errors
                         for (let key in res.body.errors) {
@@ -206,7 +227,7 @@
                         this.closeModal();
                         this.fetchData();
                     } else {
-                        throw new Error('Terjadi kesalahan server');
+                        Swal.fire({ icon: 'error', title: 'Error ' + res.status, text: res.body.message || 'Terjadi kesalahan' });
                     }
                 })
                 .catch(err => {
