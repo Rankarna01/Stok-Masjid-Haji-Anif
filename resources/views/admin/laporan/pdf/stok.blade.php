@@ -37,7 +37,7 @@
         
         <h1 class="title">{{ $setting->nama_yayasan ?? 'Yayasan Masjid' }}</h1>
         <p class="subtitle">{{ $setting->nama_sistem ?? 'Sistem Inventaris' }}</p>
-        <p class="address">{{ $setting->alamat ?? '' }} | Telp: {{ $setting->telepon ?? '-' }}</p>
+        <p class="address">{{ $setting->alamat ?? '' }} | Telp: {{ $setting->telepon ?? '-' }} | Email: {{ $setting->email ?? '-' }}</p>
     </div>
 
     <h2 class="text-center" style="margin-top:20px; font-size: 16px;">LAPORAN STOK BARANG</h2>
@@ -73,12 +73,22 @@
         </tbody>
     </table>
 
-    <div style="margin-top: 50px; width: 100%;">
-        <div style="float: right; width: 200px; text-align: center;">
-            <p>Mengetahui,</p>
-            <br><br><br><br>
-            <p><strong>Admin / Pengurus</strong></p>
-        </div>
-    </div>
+    <table style="width: 100%; margin-top: 50px; border: none;">
+        <tr>
+            <td style="width: 50%; text-align: center; border: none; padding-top: 15px;">
+                <p style="margin: 0;">Diketahui oleh :</p>
+                <p style="margin: 0;">Ketua Harian YHA</p>
+                <br><br><br><br><br>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">H. M. Saf'i Sitepu, S.Ag, SH, MH</p>
+            </td>
+            <td style="width: 50%; text-align: center; border: none;">
+                <p style="margin: 0;">Medan, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+                <p style="margin: 0;">Dibuat oleh :</p>
+                <p style="margin: 0;">Staff Umum dan Koord. PKM YHA</p>
+                <br><br><br><br><br>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">Muhammad Saputra, ST</p>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
