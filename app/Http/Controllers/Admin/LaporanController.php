@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\Distribusi;
 use App\Models\Permintaan;
+use App\Models\StokMasuk;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
@@ -19,10 +20,30 @@ class LaporanController extends Controller
     public function stok(Request $request)
     {
         if ($request->ajax()) {
-            $barangs = Barang::with(['kategori', 'satuan'])->get();
-            return response()->json($barangs);
+            $query = StokMasuk::with(['barang.kategori', 'barang.satuan']);
+            
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $query->whereBetween('tanggal', [$request->start_date, $request->end_date]);
+            }
+            
+            if ($request->filled('kategori_id') && $request->kategori_id !== 'Semua') {
+                $query->whereHas('barang', function($q) use ($request) {
+                    $q->where('kategori_id', $request->kategori_id);
+                });
+            }
+            
+            if ($request->filled('search')) {
+                $query->whereHas('barang', function($q) use ($request) {
+                    $q->where('nama_barang', 'like', '%' . $request->search . '%')
+                      ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+                });
+            }
+            
+            return response()->json($query->orderBy('tanggal', 'desc')->paginate(10));
         }
-        return view('admin.laporan.stok');
+        
+        $kategoris = \App\Models\Kategori::all();
+        return view('admin.laporan.stok', compact('kategoris'));
     }
 
     // Permintaan
@@ -38,7 +59,7 @@ class LaporanController extends Controller
                 $query->where('status', $request->status);
             }
 
-            return response()->json($query->latest()->get());
+            return response()->json($query->latest()->paginate(10));
         }
 
         return view('admin.laporan.permintaan');
@@ -54,24 +75,49 @@ class LaporanController extends Controller
                 $query->whereBetween('tanggal_distribusi', [$request->start_date, $request->end_date]);
             }
 
-            return response()->json($query->latest()->get());
+            return response()->json($query->latest()->paginate(10));
         }
 
         return view('admin.laporan.distribusi');
     }
 
     // Export PDF Stok
-    public function exportStokPdf()
+    public function exportStokPdf(Request $request)
     {
-        $barangs = Barang::with(['kategori', 'satuan'])->get();
-        $pdf = Pdf::loadView('admin.laporan.pdf.stok', compact('barangs'));
-        return $pdf->stream('Laporan_Stok_Barang.pdf');
+        $query = StokMasuk::with(['barang.kategori', 'barang.satuan']);
+        
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('tanggal', [$request->start_date, $request->end_date]);
+        }
+        
+        if ($request->filled('kategori_id') && $request->kategori_id !== 'Semua') {
+            $query->whereHas('barang', function($q) use ($request) {
+                $q->where('kategori_id', $request->kategori_id);
+            });
+        }
+        
+        if ($request->filled('search')) {
+            $query->whereHas('barang', function($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->search . '%')
+                  ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+            });
+        }
+        
+        $stokMasuks = $query->orderBy('tanggal', 'desc')->get();
+        $filter = $request->only(['start_date', 'end_date', 'kategori_id', 'search']);
+        $pdf = Pdf::loadView('admin.laporan.pdf.stok', compact('stokMasuks', 'filter'));
+        return $pdf->stream('Laporan_Historis_Stok_Masuk.pdf');
     }
 
     // Export Excel Stok
-    public function exportStokExcel()
+    public function exportStokExcel(Request $request)
     {
-        return Excel::download(new LaporanStokExport, 'Laporan_Stok_Barang.xlsx');
+        return Excel::download(new LaporanStokExport(
+            $request->kategori_id, 
+            $request->search,
+            $request->start_date,
+            $request->end_date
+        ), 'Laporan_Historis_Stok_Masuk.xlsx');
     }
 
     // Export PDF Permintaan

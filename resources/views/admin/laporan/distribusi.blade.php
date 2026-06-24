@@ -80,6 +80,21 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination -->
+    <div class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4" x-show="pagination.last_page > 1">
+        <div class="text-sm text-gray-500">
+            Menampilkan <span class="font-medium text-textDark" x-text="pagination.from || 0"></span> sampai <span class="font-medium text-textDark" x-text="pagination.to || 0"></span> dari <span class="font-medium text-textDark" x-text="pagination.total || 0"></span> data
+        </div>
+        <div class="flex gap-2">
+            <button @click="fetchData(pagination.current_page - 1)" :disabled="pagination.current_page === 1" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-semibold hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth">
+                Sebelumnya
+            </button>
+            <button @click="fetchData(pagination.current_page + 1)" :disabled="pagination.current_page === pagination.last_page" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-semibold hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth">
+                Selanjutnya
+            </button>
+        </div>
+    </div>
 </div>
 
 @push('scripts')
@@ -87,6 +102,7 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('laporanDistribusi', () => ({
             items: [],
+            pagination: {},
             filter: {
                 start_date: '',
                 end_date: ''
@@ -101,13 +117,17 @@
                 this.fetchData();
             },
             
-            fetchData() {
+            fetchData(page = 1) {
+                if (typeof page !== 'number') page = 1;
                 const query = new URLSearchParams(this.filter).toString();
-                fetch(`{{ route("admin.laporan.distribusi") }}?${query}`, {
+                fetch(`{{ route("admin.laporan.distribusi") }}?page=${page}&${query}`, {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 })
                 .then(res => res.json())
-                .then(data => { this.items = data; });
+                .then(data => { 
+                    this.items = data.data; 
+                    this.pagination = data;
+                });
             },
 
             exportPdf() {

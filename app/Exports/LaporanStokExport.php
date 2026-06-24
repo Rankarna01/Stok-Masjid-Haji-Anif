@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Barang;
+use App\Models\StokMasuk;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -13,37 +14,71 @@ use Carbon\Carbon;
 
 class LaporanStokExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithEvents
 {
+    protected $kategoriId;
+    protected $search;
+    protected $startDate;
+    protected $endDate;
+
+    public function __construct($kategoriId = null, $search = null, $startDate = null, $endDate = null)
+    {
+        $this->kategoriId = $kategoriId;
+        $this->search = $search;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
+
     public function collection()
     {
-        return Barang::with(['kategori', 'satuan'])->get();
+        $query = StokMasuk::with(['barang.kategori', 'barang.satuan']);
+        
+        if ($this->startDate && $this->endDate) {
+            $query->whereBetween('tanggal', [$this->startDate, $this->endDate]);
+        }
+        
+        if ($this->kategoriId && $this->kategoriId !== 'Semua') {
+            $query->whereHas('barang', function($q) {
+                $q->where('kategori_id', $this->kategoriId);
+            });
+        }
+        
+        if ($this->search) {
+            $query->whereHas('barang', function($q) {
+                $q->where('nama_barang', 'like', '%' . $this->search . '%')
+                  ->orWhere('kode_barang', 'like', '%' . $this->search . '%');
+            });
+        }
+        
+        return $query->orderBy('tanggal', 'desc')->get();
     }
 
     public function headings(): array
     {
         return [
             'No',
+            'Tanggal Masuk',
             'Kode Barang',
             'Nama Barang',
             'Kategori',
-            'Stok Tersedia',
-            'Satuan',
-            'Keterangan'
+            'Jumlah Masuk',
+            'Sisa Stok',
+            'Satuan'
         ];
     }
 
-    public function map($barang): array
+    public function map($item): array
     {
         static $row = 0;
         $row++;
         
         return [
             $row,
-            $barang->kode_barang,
-            $barang->nama_barang,
-            $barang->kategori->nama_kategori ?? '-',
-            $barang->stok,
-            $barang->satuan->nama_satuan ?? '-',
-            $barang->keterangan ?? '-'
+            Carbon::parse($item->tanggal)->format('d/m/Y'),
+            $item->barang->kode_barang ?? '-',
+            $item->barang->nama_barang ?? '-',
+            $item->barang->kategori->nama_kategori ?? '-',
+            '+' . $item->jumlah,
+            $item->barang->stok ?? 0,
+            $item->barang->satuan->nama_satuan ?? '-'
         ];
     }
 

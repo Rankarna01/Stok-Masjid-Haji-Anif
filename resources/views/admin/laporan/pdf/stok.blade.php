@@ -40,34 +40,46 @@
         <p class="address">{{ $setting->alamat ?? '' }} | Telp: {{ $setting->telepon ?? '-' }} | Email: {{ $setting->email ?? '-' }}</p>
     </div>
 
-    <h2 class="text-center" style="margin-top:20px; font-size: 16px;">LAPORAN STOK BARANG</h2>
-    <p class="text-right" style="font-size: 10px; margin-bottom: 5px;">Dicetak pada: {{ now()->format('d/m/Y H:i') }}</p>
+    <h2 class="text-center" style="margin-top:20px; font-size: 16px; margin-bottom: 5px;">LAPORAN HISTORIS STOK MASUK</h2>
+    <div style="font-size: 10px; margin-bottom: 10px; color: #555;">
+        @if(isset($filter['start_date']) && isset($filter['end_date']))
+            Periode: {{ date('d/m/Y', strtotime($filter['start_date'])) }} s/d {{ date('d/m/Y', strtotime($filter['end_date'])) }}
+        @else
+            Periode: Semua Waktu
+        @endif
+        <span style="float: right;">Dicetak pada: {{ now()->format('d/m/Y H:i') }}</span>
+    </div>
 
     <table>
         <thead>
             <tr>
-                <th width="5%">No</th>
-                <th width="15%">Kode Barang</th>
-                <th width="30%">Nama Barang</th>
-                <th width="20%">Kategori</th>
-                <th width="15%">Stok</th>
-                <th width="15%">Satuan</th>
+            <tr>
+                <th width="5%" class="text-center">No</th>
+                <th width="12%">Tgl Masuk</th>
+                <th width="12%">Kode Barang</th>
+                <th width="25%">Nama Barang</th>
+                <th width="16%">Kategori</th>
+                <th width="10%" class="text-center">Jml Masuk</th>
+                <th width="10%" class="text-center">Sisa Stok</th>
+                <th width="10%">Satuan</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($barangs as $index => $item)
+            @foreach($stokMasuks as $index => $item)
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $item->kode_barang }}</td>
-                <td>{{ $item->nama_barang }}</td>
-                <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
-                <td class="text-center">{{ $item->stok }}</td>
-                <td>{{ $item->satuan->nama_satuan ?? '-' }}</td>
+                <td>{{ date('d/m/Y', strtotime($item->tanggal)) }}</td>
+                <td>{{ $item->barang->kode_barang ?? '-' }}</td>
+                <td>{{ $item->barang->nama_barang ?? '-' }}</td>
+                <td>{{ $item->barang->kategori->nama_kategori ?? '-' }}</td>
+                <td class="text-center">+{{ $item->jumlah }}</td>
+                <td class="text-center">{{ $item->barang->stok ?? 0 }}</td>
+                <td>{{ $item->barang->satuan->nama_satuan ?? '-' }}</td>
             </tr>
             @endforeach
-            @if($barangs->isEmpty())
+            @if($stokMasuks->isEmpty())
             <tr>
-                <td colspan="6" class="text-center">Tidak ada data barang.</td>
+                <td colspan="8" class="text-center">Tidak ada riwayat stok masuk pada periode tersebut.</td>
             </tr>
             @endif
         </tbody>
