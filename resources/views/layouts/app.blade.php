@@ -60,7 +60,7 @@
         .sidebar-scroll:hover::-webkit-scrollbar-thumb { background: #CBD5E1; }
     </style>
 </head>
-<body class="bg-background antialiased" x-data="{ sidebarOpen: false, profileDropdownOpen: false }">
+<body class="bg-background antialiased min-h-screen w-full" x-data="{ sidebarOpen: false, profileDropdownOpen: false }">
 
     @auth
     <div class="flex h-screen overflow-hidden">
@@ -319,7 +319,7 @@
     </div>
     @else
         <!-- Guest Layout (Login) -->
-        <div class="min-h-screen flex items-center justify-center bg-background p-4">
+        <div class="min-h-screen w-full flex flex-col justify-center items-center bg-background p-4 sm:p-6 lg:p-8">
             @yield('content')
         </div>
     @endauth
