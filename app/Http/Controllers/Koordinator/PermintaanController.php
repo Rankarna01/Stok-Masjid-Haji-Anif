@@ -38,8 +38,8 @@ class PermintaanController extends Controller
             'items' => 'required|array|min:1',
             'items.*.barang_id' => 'required|exists:barang,id',
             'items.*.jumlah' => 'required|integer|min:1',
-            'items.*.alasan' => 'nullable|string',
-            'items.*.bukti' => 'nullable|image|max:2048',
+            'items.*.alasan' => 'required|string',
+            'items.*.bukti' => 'required|image|max:2048',
         ]);
 
         if ($validator->fails()) {

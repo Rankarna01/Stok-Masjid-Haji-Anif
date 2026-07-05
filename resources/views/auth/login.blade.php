@@ -58,10 +58,7 @@
                 </div>
 
                 <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-sm font-medium text-text" for="password">Password</label>
-                        <a href="{{ route('password.request') }}" class="text-xs font-semibold text-primary hover:text-teal-800 transition-smooth">Lupa Password?</a>
-                    </div>
+                    <label class="block text-sm font-medium text-text mb-1" for="password">Password</label>
                     <input 
                         x-model="formData.password"
                         type="password" 
@@ -70,7 +67,10 @@
                         placeholder="Masukkan password Anda"
                         required
                     >
-                    <p x-show="errors.password" class="text-danger text-xs mt-1" x-text="errors.password"></p>
+                    <div class="flex justify-between items-center mt-2">
+                        <p x-show="errors.password" class="text-danger text-xs" x-text="errors.password"></p>
+                        <a href="{{ route('password.request') }}" class="text-xs font-semibold text-primary hover:text-teal-800 transition-smooth ml-auto">Lupa Password?</a>
+                    </div>
                 </div>
 
                 <div x-show="errors.general" class="p-3 bg-danger/10 text-danger rounded-xl text-sm" x-text="errors.general" style="display: none;"></div>

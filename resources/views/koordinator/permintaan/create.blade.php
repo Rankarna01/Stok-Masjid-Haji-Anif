@@ -26,11 +26,16 @@
                 <input type="number" x-model="currentItem.jumlah" min="1" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
             </div>
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Alasan (Opsional)</label>
-                <input type="text" x-model="currentItem.alasan" placeholder="Misal: Untuk jumat bersih" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Alasan <span class="text-danger">*</span></label>
+                <select x-model="currentItem.alasan" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
+                    <option value="">-- Pilih Alasan --</option>
+                    <option value="Barang Rusak">Barang Rusak</option>
+                    <option value="Tidak Layak Pakai">Tidak Layak Pakai</option>
+                    <option value="Stok Habis">Stok Habis</option>
+                </select>
             </div>
             <div class="flex-1 min-w-[200px]">
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Bukti (Opsional)</label>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Bukti Foto <span class="text-danger">*</span></label>
                 <input type="file" x-ref="buktiFile" @change="handleFile($event)" accept="image/*" class="w-full px-4 py-1.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
             </div>
             <div class="w-full md:w-auto">
@@ -116,6 +121,18 @@
                     return;
                 }
 
+                if (!this.currentItem.alasan) {
+                    Swal.fire({ icon: 'warning', title: 'Alasan Wajib Diisi', text: 'Silakan pilih alasan permintaan barang terlebih dahulu.' });
+                    return;
+                }
+                
+                const existingIndex = this.items.findIndex(item => item.barang_id === this.currentItem.barang_id);
+                const hasExistingBukti = existingIndex > -1 && this.items[existingIndex].bukti;
+                if (!this.currentItem.bukti && !hasExistingBukti) {
+                    Swal.fire({ icon: 'warning', title: 'Bukti Foto Wajib Dilampirkan', text: 'Silakan lampirkan bukti foto untuk permintaan barang ini.' });
+                    return;
+                }
+
                 // Ambil data text dari select option yang dipilih
                 const selectEl = document.querySelector(`select[x-model="currentItem.barang_id"]`);
                 const selectedOption = selectEl.options[selectEl.selectedIndex];
@@ -130,7 +147,6 @@
                 }
 
                 // Cek apakah barang sudah ada di keranjang
-                const existingIndex = this.items.findIndex(item => item.barang_id === this.currentItem.barang_id);
                 if (existingIndex > -1) {
                     // Update jumlah jika sudah ada
                     const newTotal = parseInt(this.items[existingIndex].jumlah) + parseInt(this.currentItem.jumlah);
@@ -161,6 +177,13 @@
 
             submitPermintaan() {
                 if (this.items.length === 0) return;
+                
+                for (let item of this.items) {
+                    if (!item.alasan || !item.bukti) {
+                        Swal.fire({ icon: 'error', title: 'Data Tidak Lengkap', text: 'Setiap barang dalam keranjang wajib memiliki Alasan dan Bukti foto yang terlampir!' });
+                        return;
+                    }
+                }
                 
                 this.isLoading = true;
                 

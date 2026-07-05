@@ -81,7 +81,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>{{ config('app.name', 'Sistem Stok Masjid') }}</h1>
+            <h1>Yayasan Haji Anif</h1>
         </div>
         <div class="content">
             <p>Halo <strong>{{ $user->name }}</strong> ({{ ucfirst($user->role) }}),</p>
