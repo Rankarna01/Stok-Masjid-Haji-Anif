@@ -25,7 +25,7 @@ class StokKeluarController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'barang_id' => 'required|exists:barang,id',
+            'barang_id' => 'required|exists:barang,id_barang',
             'jumlah' => 'required|integer|min:1',
             'tanggal' => 'required|date',
             'keterangan' => 'nullable|string',
@@ -68,7 +68,7 @@ class StokKeluarController extends Controller
         $stokKeluar = StokKeluar::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'barang_id' => 'required|exists:barang,id',
+            'barang_id' => 'required|exists:barang,id_barang',
             'jumlah' => 'required|integer|min:1',
             'tanggal' => 'required|date',
             'keterangan' => 'nullable|string',
@@ -86,7 +86,7 @@ class StokKeluarController extends Controller
             $oldBarang->stok += $stokKeluar->jumlah; // Jika keluar dihapus, stok bertambah
             
             // Jika barang diganti
-            if ($oldBarang->id != $request->barang_id) {
+            if ($oldBarang->id_barang != $request->barang_id) {
                 $oldBarang->save();
                 $newBarang = Barang::findOrFail($request->barang_id);
             } else {

@@ -16,12 +16,12 @@
 
     <!-- List -->
     <div class="space-y-4">
-        <template x-for="item in filteredItems" :key="item.id">
+        <template x-for="item in filteredItems" :key="item.id_permintaan">
             <div class="border border-border rounded-2xl p-5 bg-white shadow-sm hover:shadow-md transition-smooth">
                 <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-gray-100 pb-4 mb-4">
                     <div>
                         <div class="flex items-center gap-3 mb-1">
-                            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md" x-text="'PRM-' + item.id.toString().padStart(4, '0')"></span>
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md" x-text="'PRM-' + item.id_permintaan.toString().padStart(4, '0')"></span>
                             <span class="text-xs font-medium text-gray-500" x-text="'Disetujui pada: ' + formatDate(item.tanggal)"></span>
                         </div>
                         <div class="text-base font-bold text-textDark mt-2">
@@ -65,7 +65,7 @@
                 <div class="space-y-3">
                     <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Barang yang Disalurkan</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <template x-for="detail in item.detail" :key="detail.id">
+                        <template x-for="detail in item.detail" :key="detail.id_permintaan_detail">
                             <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
                                 <div class="text-sm font-semibold text-textDark" x-text="detail.barang?.nama_barang"></div>
                                 <div class="font-bold text-sm text-primary" x-text="detail.jumlah + ' ' + (detail.barang?.satuan?.nama_satuan || '')"></div>
@@ -162,7 +162,7 @@
             },
 
             openModal(item) {
-                this.form.permintaan_id = item.id;
+                this.form.permintaan_id = item.id_permintaan;
                 this.form.tanggal_distribusi = new Date().toISOString().split('T')[0];
                 if (this.$refs.dokumentasi) this.$refs.dokumentasi.value = '';
                 this.isModalOpen = true;

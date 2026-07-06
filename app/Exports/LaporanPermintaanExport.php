@@ -66,7 +66,7 @@ class LaporanPermintaanExport implements FromCollection, WithHeadings, WithMappi
 
         return [
             $row,
-            'PRM-' . str_pad($permintaan->id, 4, '0', STR_PAD_LEFT),
+            'PRM-' . str_pad($permintaan->id_permintaan, 4, '0', STR_PAD_LEFT),
             $permintaan->tanggal,
             $permintaan->user->name ?? '-',
             $permintaan->user->nama_mesjid ?? '-',

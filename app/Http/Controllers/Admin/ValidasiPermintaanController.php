@@ -63,10 +63,10 @@ class ValidasiPermintaanController extends Controller
 
                     // Catat ke riwayat stok keluar
                     StokKeluar::create([
-                        'barang_id' => $barang->id,
+                        'barang_id' => $barang->id_barang,
                         'jumlah' => $detail->jumlah,
                         'tanggal' => now()->toDateString(),
-                        'keterangan' => "Penyaluran Permintaan #PRM-" . str_pad($permintaan->id, 4, '0', STR_PAD_LEFT) . " untuk Koordinator " . $permintaan->user->nama_mesjid
+                        'keterangan' => "Penyaluran Permintaan #PRM-" . str_pad($permintaan->id_permintaan, 4, '0', STR_PAD_LEFT) . " untuk Koordinator " . $permintaan->user->nama_mesjid
                     ]);
                 }
             }

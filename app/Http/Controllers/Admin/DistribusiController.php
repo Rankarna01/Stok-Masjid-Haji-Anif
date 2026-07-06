@@ -28,7 +28,7 @@ class DistribusiController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'permintaan_id' => 'required|exists:permintaan,id',
+            'permintaan_id' => 'required|exists:permintaan,id_permintaan',
             'tanggal_distribusi' => 'required|date',
             'dokumentasi' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);

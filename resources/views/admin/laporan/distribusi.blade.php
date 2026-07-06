@@ -49,7 +49,7 @@
                 </tr>
             </thead>
             <tbody class="text-sm divide-y divide-gray-100">
-                <template x-for="item in items" :key="item.id">
+                <template x-for="item in items" :key="item.id_distribusi">
                     <tr class="hover:bg-gray-50/50 transition-smooth">
                         <td class="p-4 font-medium text-textDark" x-text="formatDate(item.tanggal_distribusi)"></td>
                         <td class="p-4">
@@ -58,7 +58,7 @@
                         </td>
                         <td class="p-4">
                             <ul class="list-disc list-inside text-gray-600 text-xs space-y-1">
-                                <template x-for="detail in item.permintaan?.detail" :key="detail.id">
+                                <template x-for="detail in item.permintaan?.detail" :key="detail.id_permintaan_detail">
                                     <li x-text="(detail.barang?.nama_barang || '-') + ' (' + detail.jumlah + ' ' + (detail.barang?.satuan?.nama_satuan || '') + ')'"></li>
                                 </template>
                             </ul>

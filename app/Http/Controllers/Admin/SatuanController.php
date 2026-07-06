@@ -43,7 +43,7 @@ class SatuanController extends Controller
         $satuan = Satuan::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'nama_satuan' => 'required|string|max:50|unique:satuan,nama_satuan,' . $id,
+            'nama_satuan' => 'required|string|max:50|unique:satuan,nama_satuan,' . $id . ',id_satuan',
             'keterangan' => 'nullable|string',
         ]);
 

@@ -36,7 +36,7 @@ class PermintaanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'items' => 'required|array|min:1',
-            'items.*.barang_id' => 'required|exists:barang,id',
+            'items.*.barang_id' => 'required|exists:barang,id_barang',
             'items.*.jumlah' => 'required|integer|min:1',
             'items.*.alasan' => 'required|string',
             'items.*.bukti' => 'required|image|max:2048',
@@ -70,7 +70,7 @@ class PermintaanController extends Controller
                 }
 
                 PermintaanDetail::create([
-                    'permintaan_id' => $permintaan->id,
+                    'permintaan_id' => $permintaan->id_permintaan,
                     'barang_id' => $item['barang_id'],
                     'jumlah' => $item['jumlah'],
                     'alasan' => $item['alasan'] ?? null,

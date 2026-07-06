@@ -25,7 +25,7 @@ class StokMasukController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'barang_id' => 'required|exists:barang,id',
+            'barang_id' => 'required|exists:barang,id_barang',
             'jumlah' => 'required|integer|min:1',
             'tanggal' => 'required|date',
             'keterangan' => 'nullable|string',
@@ -62,7 +62,7 @@ class StokMasukController extends Controller
         $stokMasuk = StokMasuk::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'barang_id' => 'required|exists:barang,id',
+            'barang_id' => 'required|exists:barang,id_barang',
             'jumlah' => 'required|integer|min:1',
             'tanggal' => 'required|date',
             'keterangan' => 'nullable|string',

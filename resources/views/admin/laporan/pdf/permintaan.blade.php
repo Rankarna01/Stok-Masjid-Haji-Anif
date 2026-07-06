@@ -70,7 +70,7 @@
             @foreach($permintaans as $index => $item)
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td>PRM-{{ str_pad($item->id, 4, '0', STR_PAD_LEFT) }}</td>
+                <td>PRM-{{ str_pad($item->id_permintaan, 4, '0', STR_PAD_LEFT) }}</td>
                 <td>{{ date('d M Y', strtotime($item->tanggal)) }}</td>
                 <td>
                     <strong>{{ $item->user->name ?? '-' }}</strong><br>

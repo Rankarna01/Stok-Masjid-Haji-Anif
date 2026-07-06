@@ -64,7 +64,7 @@ class KoordinatorController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id . ',id_user',
             'nama_mesjid' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
             'alamat' => 'nullable|string',

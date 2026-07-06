@@ -12,6 +12,14 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $primaryKey = 'id_user';
+    protected $appends = ['id'];
+
+    public function getIdAttribute()
+    {
+        return $this->attributes['id_user'] ?? null;
+    }
+
     /**
      * The attributes that are mass assignable.
      *

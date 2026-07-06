@@ -20,9 +20,9 @@
                 </tr>
             </thead>
             <tbody class="text-sm divide-y divide-gray-100">
-                <template x-for="item in items" :key="item.id">
+                <template x-for="item in items" :key="item.id_distribusi">
                     <tr class="hover:bg-gray-50/50 transition-smooth">
-                        <td class="p-4 font-medium text-textDark" x-text="'PRM-' + item.permintaan.id.toString().padStart(4, '0')"></td>
+                        <td class="p-4 font-medium text-textDark" x-text="'PRM-' + item.permintaan.id_permintaan.toString().padStart(4, '0')"></td>
                         <td class="p-4 text-gray-500" x-text="formatDate(item.tanggal_distribusi)"></td>
                         <td class="p-4">
                             <ul class="list-disc list-inside text-gray-600 text-xs space-y-1">
@@ -150,7 +150,7 @@
                 formData.append('bukti_terima', fileInput.files[0]);
                 formData.append('_token', '{{ csrf_token() }}');
 
-                fetch(`/koordinator/bukti-terima/${this.selectedItem.id}`, {
+                fetch(`/koordinator/bukti-terima/${this.selectedItem.id_distribusi}`, {
                     method: 'POST',
                     body: formData,
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }

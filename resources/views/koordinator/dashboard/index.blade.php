@@ -74,7 +74,7 @@
                 </div>
                 <div class="flex-1 overflow-hidden">
                     <div class="flex justify-between items-start mb-1">
-                        <h4 class="text-sm font-bold text-textDark">PRM-{{ str_pad($prm->id, 4, '0', STR_PAD_LEFT) }}</h4>
+                        <h4 class="text-sm font-bold text-textDark">PRM-{{ str_pad($prm->id_permintaan, 4, '0', STR_PAD_LEFT) }}</h4>
                         <span class="px-2 py-0.5 text-[10px] font-semibold rounded-lg shrink-0 
                             @if($prm->status == 'Menunggu') bg-warning/10 text-warning 
                             @elseif($prm->status == 'Disetujui') bg-success/10 text-success 

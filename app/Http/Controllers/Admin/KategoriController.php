@@ -43,7 +43,7 @@ class KategoriController extends Controller
         $kategori = Kategori::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'nama_kategori' => 'required|string|max:255|unique:kategori,nama_kategori,' . $id,
+            'nama_kategori' => 'required|string|max:255|unique:kategori,nama_kategori,' . $id . ',id_kategori',
             'keterangan' => 'nullable|string',
         ]);
 

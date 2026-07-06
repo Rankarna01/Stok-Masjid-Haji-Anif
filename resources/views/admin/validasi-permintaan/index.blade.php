@@ -17,12 +17,12 @@
 
     <!-- List Permintaan -->
     <div class="space-y-4">
-        <template x-for="item in filteredItems" :key="item.id">
+        <template x-for="item in filteredItems" :key="item.id_permintaan">
             <div class="border border-border rounded-2xl p-5 bg-white shadow-sm hover:shadow-md transition-smooth">
                 <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-gray-100 pb-4 mb-4">
                     <div>
                         <div class="flex items-center gap-3 mb-1">
-                            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md" x-text="'PRM-' + item.id.toString().padStart(4, '0')"></span>
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md" x-text="'PRM-' + item.id_permintaan.toString().padStart(4, '0')"></span>
                             <span class="text-sm font-medium text-textDark" x-text="formatDate(item.tanggal)"></span>
                         </div>
                         <div class="text-base font-bold text-textDark mt-2">
@@ -40,11 +40,11 @@
                             x-text="item.status"></span>
                         
                         <div class="flex gap-2" x-show="item.status === 'Menunggu'">
-                            <button @click="prosesPermintaan(item.id, 'Disetujui')" class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-success text-white hover:bg-green-700 transition-smooth shadow-sm flex items-center gap-1">
+                            <button @click="prosesPermintaan(item.id_permintaan, 'Disetujui')" class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-success text-white hover:bg-green-700 transition-smooth shadow-sm flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 Setujui
                             </button>
-                            <button @click="prosesPermintaan(item.id, 'Ditolak')" class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-white border border-danger text-danger hover:bg-danger/10 transition-smooth shadow-sm flex items-center gap-1">
+                            <button @click="prosesPermintaan(item.id_permintaan, 'Ditolak')" class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-white border border-danger text-danger hover:bg-danger/10 transition-smooth shadow-sm flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 Tolak
                             </button>
@@ -55,7 +55,7 @@
                 <div class="space-y-3">
                     <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Rincian Barang</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <template x-for="detail in item.detail" :key="detail.id">
+                        <template x-for="detail in item.detail" :key="detail.id_permintaan_detail">
                             <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
                                 <div class="flex items-center gap-3">
                                     <template x-if="!detail.bukti_permintaan">

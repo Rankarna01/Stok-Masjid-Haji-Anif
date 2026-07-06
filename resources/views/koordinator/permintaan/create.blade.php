@@ -15,7 +15,7 @@
                 <select x-model="currentItem.barang_id" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
                     <option value="">-- Pilih Barang --</option>
                     @foreach($barangs as $b)
-                        <option value="{{ $b->id }}" data-nama="{{ $b->nama_barang }}" data-satuan="{{ $b->satuan->nama_satuan ?? '' }}" data-stok="{{ $b->stok }}">
+                        <option value="{{ $b->id_barang }}" data-nama="{{ $b->nama_barang }}" data-satuan="{{ $b->satuan->nama_satuan ?? '' }}" data-stok="{{ $b->stok }}">
                             {{ $b->kode_barang }} - {{ $b->nama_barang }} (Sisa Stok: {{ $b->stok }})
                         </option>
                     @endforeach

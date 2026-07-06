@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('permintaan_detail', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('permintaan_id')->constrained('permintaan')->cascadeOnDelete();
-            $table->foreignId('barang_id')->constrained('barang')->cascadeOnDelete();
+            $table->id('id_permintaan_detail');
+            $table->foreignId('permintaan_id')->constrained('permintaan', 'id_permintaan')->cascadeOnDelete();
+            $table->foreignId('barang_id')->constrained('barang', 'id_barang')->cascadeOnDelete();
             $table->integer('jumlah');
             $table->text('alasan')->nullable();
             $table->timestamps();

@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-border">
-                <template x-for="item in items" :key="item.jenis + '-' + item.id">
+                <template x-for="item in items" :key="item.jenis + '-' + (item.id_stok_masuk || item.id_stok_keluar)">
                     <tr class="hover:bg-gray-50/50 transition-smooth">
                         <td class="px-6 py-4 font-medium text-textDark" x-text="formatDate(item.tanggal)"></td>
                         <td class="px-6 py-4 text-text">

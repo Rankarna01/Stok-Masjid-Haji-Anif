@@ -17,7 +17,7 @@
 
     <!-- Grid View -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <template x-for="item in filteredItems" :key="item.id">
+        <template x-for="item in filteredItems" :key="item.id_barang">
             <div class="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition-smooth hover:border-primary/30 flex flex-col h-full">
                 <div class="flex justify-between items-start mb-4">
                     <template x-if="item.foto_barang">

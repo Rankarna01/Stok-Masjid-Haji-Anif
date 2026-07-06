@@ -12,11 +12,11 @@
 
     <!-- Timeline / List -->
     <div class="space-y-4">
-        <template x-for="item in items" :key="item.id">
+        <template x-for="item in items" :key="item.id_permintaan">
             <div class="border border-border rounded-2xl p-5 bg-white shadow-sm hover:shadow-md transition-smooth">
                 <div class="flex justify-between items-start border-b border-gray-100 pb-4 mb-4">
                     <div>
-                        <div class="text-xs text-gray-500 font-semibold mb-1" x-text="'No: PRM-' + item.id.toString().padStart(4, '0')"></div>
+                        <div class="text-xs text-gray-500 font-semibold mb-1" x-text="'No: PRM-' + item.id_permintaan.toString().padStart(4, '0')"></div>
                         <div class="text-sm font-medium text-textDark" x-text="formatDate(item.tanggal)"></div>
                     </div>
                     <div class="flex flex-col items-end gap-2">
@@ -30,7 +30,7 @@
                                 x-text="item.status"></span>
                             
                             <!-- Tombol Batal untuk Menunggu -->
-                            <button x-show="item.status === 'Menunggu'" @click="batalPermintaan(item.id)" class="px-3 py-1 text-xs font-semibold rounded-full border bg-danger text-white border-danger hover:bg-red-700 transition-smooth">
+                            <button x-show="item.status === 'Menunggu'" @click="batalPermintaan(item.id_permintaan)" class="px-3 py-1 text-xs font-semibold rounded-full border bg-danger text-white border-danger hover:bg-red-700 transition-smooth">
                                 Batal
                             </button>
                         </div>
@@ -48,7 +48,7 @@
                 <div class="space-y-3">
                     <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Rincian Barang Diminta</h4>
                     <ul class="space-y-2">
-                        <template x-for="detail in item.detail" :key="detail.id">
+                        <template x-for="detail in item.detail" :key="detail.id_permintaan_detail">
                             <li class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-primary">

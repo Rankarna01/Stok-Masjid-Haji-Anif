@@ -38,7 +38,7 @@
             <select x-model="filter.kategori_id" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                 <option value="Semua">Semua Kategori</option>
                 @foreach($kategoris as $kategori)
-                    <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                    <option value="{{ $kategori->id_kategori }}">{{ $kategori->nama_kategori }}</option>
                 @endforeach
             </select>
         </div>
@@ -64,7 +64,7 @@
                 </tr>
             </thead>
             <tbody class="text-sm divide-y divide-gray-100">
-                <template x-for="(item, index) in items" :key="item.id">
+                <template x-for="(item, index) in items" :key="item.id_stok_masuk">
                     <tr class="hover:bg-gray-50/50 transition-smooth">
                         <td class="p-4 text-gray-500" x-text="formatDate(item.tanggal)"></td>
                         <td class="p-4 font-medium text-textDark" x-text="item.barang?.kode_barang"></td>

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_setting');
             $table->string('nama_sistem')->default('Sistem Stok Masjid');
             $table->string('logo')->nullable();
             $table->string('nama_yayasan')->default('Yayasan Masjid Al-Ikhlas');

@@ -29,8 +29,8 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kategori_id' => 'required|exists:kategori,id',
-            'satuan_id' => 'required|exists:satuan,id',
+            'kategori_id' => 'required|exists:kategori,id_kategori',
+            'satuan_id' => 'required|exists:satuan,id_satuan',
             'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',
@@ -42,8 +42,8 @@ class BarangController extends Controller
         }
 
         // Generate Kode Barang (e.g. BRG-0001)
-        $latestBarang = Barang::orderBy('id', 'desc')->first();
-        $nextId = $latestBarang ? $latestBarang->id + 1 : 1;
+        $latestBarang = Barang::orderBy('id_barang', 'desc')->first();
+        $nextId = $latestBarang ? $latestBarang->id_barang + 1 : 1;
         $kodeBarang = 'BRG-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
         $data = $request->except('foto_barang');
@@ -69,8 +69,8 @@ class BarangController extends Controller
         $barang = Barang::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'kategori_id' => 'required|exists:kategori,id',
-            'satuan_id' => 'required|exists:satuan,id',
+            'kategori_id' => 'required|exists:kategori,id_kategori',
+            'satuan_id' => 'required|exists:satuan,id_satuan',
             'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',

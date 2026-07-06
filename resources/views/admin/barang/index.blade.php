@@ -45,7 +45,7 @@
                                 <button @click="openModal(item)" class="p-1.5 text-info hover:bg-info/10 rounded-lg transition-smooth border border-transparent hover:border-info/20">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </button>
-                                <button @click="deleteData(item.id)" class="p-1.5 text-danger hover:bg-danger/10 rounded-lg transition-smooth border border-transparent hover:border-danger/20">
+                                <button @click="deleteData(item.id_barang)" class="p-1.5 text-danger hover:bg-danger/10 rounded-lg transition-smooth border border-transparent hover:border-danger/20">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
@@ -96,7 +96,7 @@
                             <select x-model="form.kategori_id" required class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
                                 <option value="">Pilih Kategori</option>
                                 @foreach($kategoris as $k)
-                                    <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                                    <option value="{{ $k->id_kategori }}">{{ $k->nama_kategori }}</option>
                                 @endforeach
                             </select>
                             <span class="text-xs text-danger" x-text="errors.kategori_id"></span>
@@ -108,7 +108,7 @@
                             <select x-model="form.satuan_id" required class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-smooth text-sm">
                                 <option value="">Pilih Satuan</option>
                                 @foreach($satuans as $s)
-                                    <option value="{{ $s->id }}">{{ $s->nama_satuan }}</option>
+                                    <option value="{{ $s->id_satuan }}">{{ $s->nama_satuan }}</option>
                                 @endforeach
                             </select>
                             <span class="text-xs text-danger" x-text="errors.satuan_id"></span>
@@ -174,7 +174,7 @@
                 this.errors = {};
                 if (item) {
                     this.isEdit = true;
-                    this.editId = item.id;
+                    this.editId = item.id_barang;
                     this.form = { ...item };
                 } else {
                     this.isEdit = false;

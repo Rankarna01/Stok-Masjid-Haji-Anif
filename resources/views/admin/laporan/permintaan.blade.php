@@ -59,9 +59,9 @@
                 </tr>
             </thead>
             <tbody class="text-sm divide-y divide-gray-100">
-                <template x-for="item in items" :key="item.id">
+                <template x-for="item in items" :key="item.id_permintaan">
                     <tr class="hover:bg-gray-50/50 transition-smooth">
-                        <td class="p-4 font-medium text-textDark" x-text="'PRM-' + item.id.toString().padStart(4, '0')"></td>
+                        <td class="p-4 font-medium text-textDark" x-text="'PRM-' + item.id_permintaan.toString().padStart(4, '0')"></td>
                         <td class="p-4 text-gray-500" x-text="formatDate(item.tanggal)"></td>
                         <td class="p-4">
                             <div class="font-bold text-primary" x-text="item.user?.name"></div>
@@ -69,7 +69,7 @@
                         </td>
                         <td class="p-4">
                             <ul class="list-disc list-inside text-gray-600 text-xs space-y-1">
-                                <template x-for="detail in item.detail" :key="detail.id">
+                                <template x-for="detail in item.detail" :key="detail.id_permintaan_detail">
                                     <li x-text="(detail.barang?.nama_barang || '-') + ' (' + detail.jumlah + ' ' + (detail.barang?.satuan?.nama_satuan || '') + ')'"></li>
                                 </template>
                             </ul>

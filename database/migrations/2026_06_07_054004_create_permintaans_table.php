@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('permintaan', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->id('id_permintaan');
+            $table->foreignId('user_id')->constrained('users', 'id_user')->cascadeOnDelete();
             $table->enum('status', ['Menunggu', 'Disetujui', 'Ditolak'])->default('Menunggu');
             $table->date('tanggal');
             $table->timestamps();
