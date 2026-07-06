@@ -18,11 +18,11 @@ class PermintaanDetail extends Model
 
     public function permintaan()
     {
-        return $this->belongsTo(Permintaan::class);
+        return $this->belongsTo(Permintaan::class, 'permintaan_id', 'id_permintaan');
     }
 
     public function barang()
     {
-        return $this->belongsTo(Barang::class);
+        return $this->belongsTo(Barang::class, 'barang_id', 'id_barang');
     }
 }

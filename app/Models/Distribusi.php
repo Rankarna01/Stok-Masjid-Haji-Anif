@@ -18,6 +18,6 @@ class Distribusi extends Model
 
     public function permintaan()
     {
-        return $this->belongsTo(Permintaan::class);
+        return $this->belongsTo(Permintaan::class, 'permintaan_id', 'id_permintaan');
     }
 }

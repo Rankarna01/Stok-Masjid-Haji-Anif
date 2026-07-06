@@ -18,16 +18,16 @@ class Permintaan extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id_user');
     }
 
     public function detail()
     {
-        return $this->hasMany(PermintaanDetail::class);
+        return $this->hasMany(PermintaanDetail::class, 'permintaan_id', 'id_permintaan');
     }
 
     public function distribusi()
     {
-        return $this->hasOne(Distribusi::class);
+        return $this->hasOne(Distribusi::class, 'permintaan_id', 'id_permintaan');
     }
 }
